@@ -22,12 +22,28 @@
 
 from launch import LaunchDescription
 from launch_ros.actions import Node
+from launch.actions import IncludeLaunchDescription
+from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import Command
 from ament_index_python.packages import get_package_share_directory
+
 import os
 import yaml
 
+
 def generate_launch_description():
+
+    pkg_ros_ign_gazebo = get_package_share_directory('ros_ign_gazebo')
+
+    ign_gazebo = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(pkg_ros_ign_gazebo, 'launch', 'ign_gazebo.launch.py')),
+        launch_arguments={
+            'ign_args': '-r ../gazebo/world.sdf'
+        }.items(),
+    )
+
+
     ld = LaunchDescription()
     config = os.path.join(
         get_package_share_directory('f1tenth_gym_ros'),
@@ -84,6 +100,7 @@ def generate_launch_description():
     )
 
     # finalize
+    ld.add_action(ign_gazebo)
     ld.add_action(rviz_node)
     ld.add_action(bridge_node)
     ld.add_action(nav_lifecycle_node)
