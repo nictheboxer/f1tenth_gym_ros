@@ -34,7 +34,6 @@
     </plugin>
 
 
-
     <!-- Moving Forward-->
     <plugin filename="libignition-gazebo-triggered-publisher-system.so"
             name="ignition::gazebo::systems::TriggeredPublisher">
@@ -79,7 +78,7 @@
         </output>
     </plugin>
 
-    <gui fullscreen="0">
+    <gui fullscreen="1">
 
         <plugin filename="GzScene3D" name="3D View">
             <ignition-gui>
@@ -233,7 +232,7 @@
         <visual name='visual'>
             <geometry>
                 <box>
-                    <size>0.3302 0.2032 0.1</size>
+                    <size>0.3302 0.20 0.1</size>
                 </box>
             </geometry>
             <!--let's add color to our link-->
@@ -247,7 +246,7 @@
             <collision name='collision'>
                 <geometry>
                     <box>
-                        <size>0.3302 0.2032 0.1</size>
+                        <size>0.3302 0.20 0.1</size>
                     </box>
                 </geometry>
             </collision>
@@ -289,10 +288,10 @@
             </sensor>
         </link>
         
-        <link name='left_wheel'>
-            <pose relative_to="chassis">0.165 0.13 -0.020 -1.5707 0 0</pose>
+        <link name='front_left_wheel'>
+            <pose relative_to="chassis">0.165 0.15 -0.020 -1.5707 0 0</pose>
                 <inertial>
-                    <mass>0.22</mass>
+                    <mass>0.15</mass>
                     <inertia>
                         <ixx>0.000169</ixx>
                         <ixy>0</ixy>
@@ -326,10 +325,10 @@
             </collision>
         </link>
 
-        <link name='right_wheel'>
-            <pose relative_to="chassis">0.165 -0.13 -0.020 -1.5707 0 0</pose>
+        <link name='front_right_wheel'>
+            <pose relative_to="chassis">0.165 -0.15 -0.020 -1.5707 0 0</pose>
                 <inertial>
-                    <mass>0.22</mass>
+                    <mass>0.15</mass>
                     <inertia>
                         <ixx>0.000169</ixx>
                         <ixy>0</ixy>
@@ -364,10 +363,10 @@
         </link>
 
         <!--The same as left wheel but with different position-->
-        <link name='right_rear_wheel'>
-            <pose relative_to="chassis">-0.165 -0.13 -0.020 -1.5707 0 0</pose> <!--angles are in radian-->
+        <link name='rear_right_wheel'>
+            <pose relative_to="chassis">-0.165 -0.15 -0.020 -1.5707 0 0</pose> <!--angles are in radian-->
             <inertial>
-                <mass>0.22</mass>
+                <mass>0.15</mass>
                 <inertia>
                     <ixx>0.000169</ixx>
                     <ixy>0</ixy>
@@ -400,10 +399,10 @@
             </collision>
         </link>
 
-        <link name='left_rear_wheel'>
-            <pose relative_to="chassis">-0.165 0.13 -0.020 -1.5707 0 0</pose> <!--angles are in radian-->
+        <link name='rear_left_wheel'>
+            <pose relative_to="chassis">-0.165 0.15 -0.020 -1.5707 0 0</pose> <!--angles are in radian-->
             <inertial>
-                <mass>0.22</mass>
+                <mass>0.15</mass>
                 <inertia>
                     <ixx>0.000169</ixx>
                     <ixy>0</ixy>
@@ -523,9 +522,9 @@
         </link>
 
         <joint name='front_left_wheel_joint' type='revolute'>
-            <pose relative_to='left_wheel'/>
+            <pose relative_to='front_left_wheel'/>
             <parent>chassis</parent>
-            <child>left_wheel</child>
+            <child>front_left_wheel</child>
             <axis>
                 <xyz expressed_in='__model__'>0 1 0</xyz> <!--can be defined as any frame or even arbitrary frames-->
                 <limit>
@@ -536,9 +535,9 @@
         </joint>
 
         <joint name='front_right_wheel_joint' type='revolute'>
-            <pose relative_to='right_wheel'/>
+            <pose relative_to='front_right_wheel'/>
             <parent>chassis</parent>
-            <child>right_wheel</child>
+            <child>front_right_wheel</child>
             <axis>
                 <xyz expressed_in='__model__'>0 1 0</xyz>
                 <limit>
@@ -549,9 +548,9 @@
         </joint>
 
         <joint name='rear_right_wheel_joint' type='revolute'>
-            <pose relative_to='right_rear_wheel'/>
+            <pose relative_to='rear_right_wheel'/>
             <parent>chassis</parent>
-            <child>right_rear_wheel</child>
+            <child>rear_right_wheel</child>
             <axis>
                 <xyz expressed_in='__model__'>0 1 0</xyz>
                 <limit>
@@ -562,9 +561,9 @@
         </joint>
 
         <joint name='rear_left_wheel_joint' type='revolute'>
-            <pose relative_to='left_rear_wheel'/>
+            <pose relative_to='rear_left_wheel'/>
             <parent>chassis</parent>
-            <child>left_rear_wheel</child>
+            <child>rear_left_wheel</child>
             <axis>
                 <xyz expressed_in='__model__'>0 1 0</xyz>
                 <limit>
@@ -578,27 +577,27 @@
             <pose relative_to='chassis'/>
             <parent>chassis</parent>
             <child>lidar</child>
-            <axis>
+            <!-- <axis>
                 <xyz expressed_in='__model__'>0 0 1</xyz>
                 <limit>
-                    <lower>-1.79769e+308</lower>    <!--negative infinity-->
-                    <upper>1.79769e+308</upper>     <!--positive infinity-->
+                    <lower>-1.79769e+308</lower>    
+                    <upper>1.79769e+308</upper>     
                 </limit>
-            </axis>
+            </axis> -->
         </joint>
 
         <joint name="front_left_wheel_steering_joint" type="revolute">
             <parent>chassis</parent>
             <child>front_left_wheel_steering_link</child>
             <axis>
-            <xyz>0 0 1</xyz>
-            <limit>
-                <lower>-0.6</lower>
-                <upper>+0.6</upper>
-                <velocity>1.0</velocity>
-                <effort>25</effort>
-            </limit>
-            <use_parent_model_frame>1</use_parent_model_frame>
+                <xyz expressed_in='__model__'>0 0 1</xyz>
+                <limit>
+                    <lower>-1.6</lower>
+                    <upper>+1.6</upper>
+                    <velocity>10.0</velocity>
+                    <effort>25</effort>
+                </limit>
+                <use_parent_model_frame>1</use_parent_model_frame>
             </axis>
         </joint>
 
@@ -606,13 +605,13 @@
             <parent>chassis</parent>
             <child>front_right_wheel_steering_link</child>
             <axis>
-            <xyz>0 0 1</xyz>
-            <limit>
-                <lower>-0.6</lower>
-                <upper>+0.6</upper>
-                <velocity>1.0</velocity>
-                <effort>25</effort>
-            </limit>
+                <xyz expressed_in='__model__'>0 0 1</xyz>
+                <limit>
+                    <lower>-1.6</lower>
+                    <upper>+1.6</upper>
+                    <velocity>10.0</velocity>
+                    <effort>25</effort>
+                </limit>
             </axis>
         </joint>
 
@@ -625,20 +624,16 @@
             <right_joint>rear_right_wheel_joint</right_joint>
             <left_steering_joint>front_left_wheel_steering_joint</left_steering_joint>
             <right_steering_joint>front_right_wheel_steering_joint</right_steering_joint>
-            <kingpin_width>0.05</kingpin_width>
+            <kingpin_width>0.5</kingpin_width>
             <steering_limit>10.5</steering_limit>
-            <wheel_base>0.3302</wheel_base>
-            <wheel_separation>0.26</wheel_separation>
+            <wheel_base>0.33</wheel_base>
+            <wheel_separation>0.30</wheel_separation>
             <wheel_radius>0.0508</wheel_radius>
             <min_velocity>-1</min_velocity>
             <max_velocity>1</max_velocity>
             <min_acceleration>-3</min_acceleration>
             <max_acceleration>3</max_acceleration>
         </plugin>
-
-    
-
-
 
     </model>
 
