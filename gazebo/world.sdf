@@ -40,7 +40,7 @@
         <input type="ignition.msgs.Int32" topic="/keyboard/keypress">
             <match field="data">16777235</match>
         </input>
-        <output type="ignition.msgs.Twist" topic="/cmd_vel">
+        <output type="ignition.msgs.Twist" topic="/racecar/cmd_vel">
             linear: {x: 0.5}, angular: {z: 0.0}
         </output>
     </plugin>
@@ -51,7 +51,7 @@
         <input type="ignition.msgs.Int32" topic="/keyboard/keypress">
             <match field="data">16777237</match>
         </input>
-        <output type="ignition.msgs.Twist" topic="/cmd_vel">
+        <output type="ignition.msgs.Twist" topic="/racecar/cmd_vel">
             linear: {x: -0.5}, angular: {z: 0.0}
         </output>
     </plugin>
@@ -62,7 +62,7 @@
         <input type="ignition.msgs.Int32" topic="/keyboard/keypress">
             <match field="data">16777236</match>
         </input>
-        <output type="ignition.msgs.Twist" topic="/cmd_vel">
+        <output type="ignition.msgs.Twist" topic="/racecar/cmd_vel">
             linear: {x: 0.0}, angular: {z: -0.5}
         </output>
     </plugin>
@@ -73,7 +73,7 @@
         <input type="ignition.msgs.Int32" topic="/keyboard/keypress">
             <match field="data">16777234</match>
         </input>
-        <output type="ignition.msgs.Twist" topic="/cmd_vel">
+        <output type="ignition.msgs.Twist" topic="/racecar/cmd_vel">
             linear: {x: 0.0}, angular: {z: 0.5}
         </output>
     </plugin>
@@ -255,12 +255,12 @@
                 <always_on>1</always_on>
                 <update_rate>1</update_rate>
                 <visualize>true</visualize>
-                <topic>imu</topic>
+                <topic>/racecar/imu</topic>
             </sensor>
 
             <sensor name='gpu_lidar' type='gpu_lidar'>"
                 <pose relative_to='lidar_frame'>0 0 0 0 0 0</pose>
-                <topic>lidar</topic>
+                <topic>/racecar/lidar</topic>
                 <update_rate>10</update_rate>
                 <ray>
                     <scan>
