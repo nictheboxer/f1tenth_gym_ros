@@ -47,10 +47,11 @@ def generate_launch_description():
     bridge = Node(
         package='ros_ign_bridge',
         executable='parameter_bridge',
-        arguments=['/racecar/lidar@sensor_msgs/msg/LaserScan[ignition.msgs.LaserScan',
-                   '/racecar/lidar/points@sensor_msgs/msg/PointCloud2[ignition.msgs.PointCloudPacked',
-                   '/racecar/cmd_vel@geometry_msgs/msg/Twist]ignition.msgs.Twist',
-                   '/model/racecar/odometry@nav_msgs/msg/Odometry[ignition.msgs.Odometry',
+        arguments=['/lidar@sensor_msgs/msg/LaserScan[ignition.msgs.LaserScan',
+                   '/lidar/points@sensor_msgs/msg/PointCloud2[ignition.msgs.PointCloudPacked',
+                   '/cmd_vel@geometry_msgs/msg/Twist]ignition.msgs.Twist',
+                   '/odom@nav_msgs/msg/Odometry[ignition.msgs.Odometry',
+                   '/imu@sensor_msgs/msg/Imu[ignition.msgs.Imu'
                    ],
         output='screen'
     )
