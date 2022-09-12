@@ -43,6 +43,17 @@ def generate_launch_description():
         }.items(),
     )
 
+    # Bridge [ from ign to ROS, ] from ROS to ign, @ both directional
+    bridge = Node(
+        package='ros_ign_bridge',
+        executable='parameter_bridge',
+        arguments=['/racecar/lidar@sensor_msgs/msg/LaserScan[ignition.msgs.LaserScan',
+                   '/racecar/lidar/points@sensor_msgs/msg/PointCloud2[ignition.msgs.PointCloudPacked',
+                   '/racecar/cmd_vel@geometry_msgs/msg/Twist]ignition.msgs.Twist',
+                   '/model/racecar/odometry@nav_msgs/msg/Odometry[ignition.msgs.Odometry',
+                   ],
+        output='screen'
+    )
 
     ld = LaunchDescription()
     config = os.path.join(
@@ -106,6 +117,7 @@ def generate_launch_description():
     ld.add_action(nav_lifecycle_node)
     ld.add_action(map_server_node)
     ld.add_action(ego_robot_publisher)
+    ld.add_action(bridge)
     if has_opp:
         ld.add_action(opp_robot_publisher)
 
