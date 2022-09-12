@@ -1,6 +1,6 @@
-# import the Empty module from std_servs service interface
+# import the Empty service module from std_srvs
 from std_srvs.srv import Empty
-# import the ROS2 python client libraries
+# import rclpy ROS 2 client libraries
 import rclpy
 from rclpy.node import Node
 
@@ -8,54 +8,50 @@ from rclpy.node import Node
 class DriveServiceClientAsync(Node):
 
     def __init__(self):
-        # Here we have the class constructor
 
-        # call the class constructor to initialize the node as server_client
+        # call the class constructor to initialize the node as drive_service_client, inherit from super class
         super().__init__('drive_service_client')
-        # create the service client object
-        # defines the name and type of the service server we will work with.
+        # next create the service client object
+        # create_client(service_type, name_of_the_service)
         self.client = self.create_client(Empty, 'driving')
-        # checks once per second if a service matching the type and name of the client is available.
+        # safety check to check once per second whether the service server is awailable 
         while not self.client.wait_for_service(timeout_sec=1.0):
-            # if it is not available, a message is displayed
-            self.get_logger().info('service not available, waiting again...')
+            # display warning message if service server not available 
+            self.get_logger().info('driving service not available, waiting')
         
-        # create a Empty request
-        self.req = Empty.Request()
+        # the empty request does not have any arguments, just create Empty.Request()
+        self.request = Empty.Request()
         
 
     def send_request(self):
         
-        # send the request
-        self.future = self.client.call_async(self.req)
+        #this function send the empty request
+        self.future = self.client.call_async(self.request)
 
 
 def main(args=None):
-    # initialize the ROS communication
+    # start the ROS comms 
     rclpy.init(args=args)
-    # declare the node constructor
+    # declare the DriveSeriveClient 
     client = DriveServiceClientAsync()
-    # run the send_request() method
+    # send the service request
     client.send_request()
 
     while rclpy.ok():
-        # pause the program execution, waits for a request to kill the node (ctrl+c)
+        # wait till the response is received or kill is sent (ctrl+c)
         rclpy.spin_once(client)
         if client.future.done():
             try:
-                # checks the future for a response from the service
-                # while the system is running. 
-                # If the service has sent a response, the result will be written
-                # to a log message.
+                # checks for the service server response and logs it
                 response = client.future.result()
             except Exception as e:
-                # Display the message on the console
+                # Display response on screen
                 client.get_logger().info(
-                    'Service call failed %r' % (e,))
+                    'Service call not sucesfull %r' % (e,))
             else:
-                # Display the message on the console
+                # Display sucesfull response msg
                 client.get_logger().info(
-                    'the robot is moving' ) 
+                    'the robot is driving' ) 
             break
 
     client.destroy_node()
