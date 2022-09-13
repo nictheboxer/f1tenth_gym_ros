@@ -66,6 +66,17 @@ def generate_launch_description():
     has_opp = config_dict['bridge']['ros__parameters']['num_agent'] > 1
     teleop = config_dict['bridge']['ros__parameters']['kb_teleop']
 
+
+    drive_service = Node(
+        package='f1tenth_gym_ros',
+        executable = 'drive_service_server',
+        name = 'drive_server',
+        output='screen'
+    )
+
+
+
+
     bridge_node = Node(
         package='f1tenth_gym_ros',
         executable='gym_bridge',
@@ -130,10 +141,9 @@ def generate_launch_description():
     ld.add_action(nav_lifecycle_node)
     ld.add_action(map_server_node)
     ld.add_action(ego_robot_publisher)
-
     ld.add_action(scan_subscriber)
-    
     ld.add_action(bridge)
+    ld.add_action(drive_service)
     if has_opp:
         ld.add_action(opp_robot_publisher)
 
