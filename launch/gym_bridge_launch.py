@@ -56,6 +56,7 @@ def generate_launch_description():
         output='screen'
     )
 
+
     ld = LaunchDescription()
     config = os.path.join(
         get_package_share_directory('f1tenth_gym_ros'),
@@ -76,7 +77,6 @@ def generate_launch_description():
 
 
 
-
     bridge_node = Node(
         package='f1tenth_gym_ros',
         executable='gym_bridge',
@@ -92,7 +92,11 @@ def generate_launch_description():
     )
 
 
-
+    forward_vel_publisher = Node(
+        package='f1tenth_gym_ros',
+        executable = 'forward_publisher',
+        output = 'screen'
+    )
 
     rviz_node = Node(
         package='rviz2',
@@ -134,7 +138,6 @@ def generate_launch_description():
     )
 
     # finalize
-
     ld.add_action(ign_gazebo)
     ld.add_action(rviz_node)
     ld.add_action(bridge_node)
@@ -144,6 +147,7 @@ def generate_launch_description():
     ld.add_action(scan_subscriber)
     ld.add_action(bridge)
     ld.add_action(drive_service)
+    ld.add_action(forward_vel_publisher)
     if has_opp:
         ld.add_action(opp_robot_publisher)
 
