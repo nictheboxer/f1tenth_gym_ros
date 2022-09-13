@@ -51,7 +51,8 @@ def generate_launch_description():
                    '/lidar/points@sensor_msgs/msg/PointCloud2[ignition.msgs.PointCloudPacked',
                    '/cmd_vel@geometry_msgs/msg/Twist]ignition.msgs.Twist',
                    '/odom@nav_msgs/msg/Odometry[ignition.msgs.Odometry',
-                   '/imu@sensor_msgs/msg/Imu[ignition.msgs.Imu'
+                   '/imu@sensor_msgs/msg/Imu[ignition.msgs.Imu',
+                   '/camera@sensor_msgs/msg/C'
                    ],
         output='screen'
     )
@@ -65,6 +66,13 @@ def generate_launch_description():
     config_dict = yaml.safe_load(open(config, 'r'))
     has_opp = config_dict['bridge']['ros__parameters']['num_agent'] > 1
     teleop = config_dict['bridge']['ros__parameters']['kb_teleop']
+
+    camera_bridge = Node(
+        package='ros_ign_image',
+        executable='image_bridge',
+        arguments=['/camera', 'depth_camera', 'rgbd_camera/image', 'rgbd_camera/depth_image'],
+        output='screen'
+    )
 
     bridge_node = Node(
         package='f1tenth_gym_ros',
@@ -119,6 +127,7 @@ def generate_launch_description():
     ld.add_action(map_server_node)
     ld.add_action(ego_robot_publisher)
     ld.add_action(bridge)
+    ld.add_action(camera_bridge)
     if has_opp:
         ld.add_action(opp_robot_publisher)
 
