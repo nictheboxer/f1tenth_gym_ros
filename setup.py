@@ -28,11 +28,11 @@ setup(
         'console_scripts': [
 
             'gym_bridge = f1tenth_gym_ros.gym_bridge:main',
+
             'scan_subscriber = f1tenth_gym_ros.scan_subscriber:main'
-
-
             'drive_service_client = f1tenth_gym_ros.drive_service_client:main',
             'drive_service_server = f1tenth_gym_ros.drive_service_server:main'
+            'forward_publisher = f1tenth_gym_ros.forward_publisher:main'
         ],
     },
 )
