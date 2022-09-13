@@ -44,6 +44,20 @@ def generate_launch_description():
         name='bridge',
         parameters=[config]
     )
+
+
+    scan_subscriber = Node(
+        package='f1tenth_gym_ros',
+        executable='scan_subscriber',
+        name='scan_subscriber',
+        output='screen'
+    )
+
+
+
+
+
+
     rviz_node = Node(
         package='rviz2',
         executable='rviz2',
@@ -89,6 +103,9 @@ def generate_launch_description():
     ld.add_action(nav_lifecycle_node)
     ld.add_action(map_server_node)
     ld.add_action(ego_robot_publisher)
+
+    ld.add_action(scan_subscriber)
+    
     if has_opp:
         ld.add_action(opp_robot_publisher)
 
