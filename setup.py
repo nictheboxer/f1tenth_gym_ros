@@ -29,6 +29,7 @@ setup(
 
             'gym_bridge = f1tenth_gym_ros.gym_bridge:main',
             'scan_subscriber = f1tenth_gym_ros.scan_subscriber:main'
+
         ],
     },
 )

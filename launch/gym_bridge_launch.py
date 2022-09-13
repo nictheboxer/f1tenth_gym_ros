@@ -22,12 +22,40 @@
 
 from launch import LaunchDescription
 from launch_ros.actions import Node
+from launch.actions import IncludeLaunchDescription
+from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import Command
 from ament_index_python.packages import get_package_share_directory
+
 import os
 import yaml
 
+
 def generate_launch_description():
+
+    pkg_ros_ign_gazebo = get_package_share_directory('ros_ign_gazebo')
+
+    ign_gazebo = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(pkg_ros_ign_gazebo, 'launch', 'ign_gazebo.launch.py')),
+        launch_arguments={
+            'ign_args': '-r ../gazebo/world.sdf'
+        }.items(),
+    )
+
+    # Bridge [ from ign to ROS, ] from ROS to ign, @ both directional
+    bridge = Node(
+        package='ros_ign_bridge',
+        executable='parameter_bridge',
+        arguments=['/lidar@sensor_msgs/msg/LaserScan[ignition.msgs.LaserScan',
+                   '/lidar/points@sensor_msgs/msg/PointCloud2[ignition.msgs.PointCloudPacked',
+                   '/cmd_vel@geometry_msgs/msg/Twist]ignition.msgs.Twist',
+                   '/odom@nav_msgs/msg/Odometry[ignition.msgs.Odometry',
+                   '/imu@sensor_msgs/msg/Imu[ignition.msgs.Imu'
+                   ],
+        output='screen'
+    )
+
     ld = LaunchDescription()
     config = os.path.join(
         get_package_share_directory('f1tenth_gym_ros'),
@@ -45,15 +73,12 @@ def generate_launch_description():
         parameters=[config]
     )
 
-
     scan_subscriber = Node(
         package='f1tenth_gym_ros',
         executable='scan_subscriber',
         name='scan_subscriber',
         output='screen'
     )
-
-
 
 
 
@@ -98,6 +123,8 @@ def generate_launch_description():
     )
 
     # finalize
+
+    ld.add_action(ign_gazebo)
     ld.add_action(rviz_node)
     ld.add_action(bridge_node)
     ld.add_action(nav_lifecycle_node)
@@ -106,6 +133,7 @@ def generate_launch_description():
 
     ld.add_action(scan_subscriber)
     
+    ld.add_action(bridge)
     if has_opp:
         ld.add_action(opp_robot_publisher)
 
