@@ -51,7 +51,9 @@ def generate_launch_description():
                    '/lidar/points@sensor_msgs/msg/PointCloud2[ignition.msgs.PointCloudPacked',
                    '/cmd_vel@geometry_msgs/msg/Twist]ignition.msgs.Twist',
                    '/odom@nav_msgs/msg/Odometry[ignition.msgs.Odometry',
-                   '/imu@sensor_msgs/msg/Imu[ignition.msgs.Imu'
+                   '/imu@sensor_msgs/msg/Imu[ignition.msgs.Imu',
+                   '/camera@sensor_msgs/msg/Image@ignition.msgs.Image',
+                #    '/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo'
                    ],
         output='screen'
     )
@@ -74,7 +76,6 @@ def generate_launch_description():
         name = 'drive_server',
         output='screen'
     )
-
 
 
 
