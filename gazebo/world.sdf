@@ -313,7 +313,7 @@
                     </range>
                 </ray>
                 <always_on>1</always_on>
-                <visualize>true</visualize>
+                <visualize>false</visualize>
             </sensor>
         </link>
 
@@ -629,17 +629,10 @@
             </axis>
         </joint>
 
-        <joint name='lidar_joint' type='revolute'>
+        <joint name='lidar_joint' type='fixed'>
             <pose relative_to='chassis'/>
             <parent>chassis</parent>
             <child>lidar</child>
-            <!-- <axis>
-                <xyz expressed_in='__model__'>0 0 1</xyz>
-                <limit>
-                    <lower>-1.79769e+308</lower>    
-                    <upper>1.79769e+308</upper>     
-                </limit>
-            </axis> -->
         </joint>
 
         <joint name='camera_joint' type='fixed'>
