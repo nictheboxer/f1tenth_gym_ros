@@ -39,12 +39,12 @@ def generate_launch_description():
         PythonLaunchDescriptionSource(
             os.path.join(pkg_ros_ign_gazebo, 'launch', 'ign_gazebo.launch.py')),
         launch_arguments={
-            'ign_args': '-r ../gazebo/world.sdf'
+            'ign_args': '-r ../gazebo/aapstrack.world'
         }.items(),
     )
 
     # Bridge [ from ign to ROS, ] from ROS to ign, @ both directional
-    bridge = Node(
+    ign_bridge = Node(
         package='ros_ign_bridge',
         executable='parameter_bridge',
         arguments=['/lidar@sensor_msgs/msg/LaserScan[ignition.msgs.LaserScan',
@@ -52,9 +52,17 @@ def generate_launch_description():
                    '/cmd_vel@geometry_msgs/msg/Twist]ignition.msgs.Twist',
                    '/odom@nav_msgs/msg/Odometry[ignition.msgs.Odometry',
                    '/imu@sensor_msgs/msg/Imu[ignition.msgs.Imu',
-                   '/camera@sensor_msgs/msg/Image@ignition.msgs.Image',
+                #    '/camera@sensor_msgs/msg/Image@ignition.msgs.Image',
                 #    '/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo'
                    ],
+        output='screen'
+    )
+
+    camera_bridge = Node(
+        package='ros_ign_image',
+        executable='image_bridge',
+        # arguments=['camera', 'depth_camera', 'rgbd_camera/image', 'rgbd_camera/depth_image'],
+        arguments=['camera'],
         output='screen'
     )
 
@@ -76,7 +84,6 @@ def generate_launch_description():
         name = 'drive_server',
         output='screen'
     )
-
 
 
 
@@ -150,10 +157,13 @@ def generate_launch_description():
     ld.add_action(nav_lifecycle_node)
     ld.add_action(map_server_node)
     ld.add_action(ego_robot_publisher)
-    ld.add_action(scan_subscriber)
-    ld.add_action(bridge)
-    ld.add_action(drive_service)
-    ld.add_action(forward_vel_publisher)
+    ld.add_action(ign_bridge)
+
+    ld.add_action(camera_bridge)
+
+    # ld.add_action(scan_subscriber)
+    # ld.add_action(drive_service)
+    # ld.add_action(forward_vel_publisher)
     if has_opp:
         ld.add_action(opp_robot_publisher)
 
